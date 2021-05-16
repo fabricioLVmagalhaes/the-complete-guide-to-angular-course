@@ -34,7 +34,7 @@
             style="margin-right: 5px"
             [disabled]="!f.valid"
           >
-            Add
+            {{ edtMode ? "Update" : "Add" }}
           </button>
           <button
             class="btn btn-danger"

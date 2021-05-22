@@ -4,26 +4,31 @@ import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Recipe } from './recipe.model';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
 
   private recipes: Recipe[] = [
-    new Recipe(
-      'Tasty Schnitzel',
-      'This is simply a test',
-      'https://cdn.pixabay.com/photo/2017/10/05/12/53/schnitzel-2819330_1280.jpg',
-      [new Ingredient('Meat', 1), new Ingredient('French Fries', 20)]
-    ),
-    new Recipe(
-      'Big Fat Burger',
-      'This is simply a test',
-      'https://clientes.programaconsumer.com.br/wp-content/uploads/2020/02/underground-burger-goiania-go-2.jpg',
-      [new Ingredient('Buns', 2), new Ingredient('Meat', 1)]
-    ),
+    // new Recipe(
+    //   'Tasty Schnitzel',
+    //   'This is simply a test',
+    //   'https://cdn.pixabay.com/photo/2017/10/05/12/53/schnitzel-2819330_1280.jpg',
+    //   [new Ingredient('Meat', 1), new Ingredient('French Fries', 20)]
+    // ),
+    // new Recipe(
+    //   'Big Fat Burger',
+    //   'This is simply a test',
+    //   'https://clientes.programaconsumer.com.br/wp-content/uploads/2020/02/underground-burger-goiania-go-2.jpg',
+    //   [new Ingredient('Buns', 2), new Ingredient('Meat', 1)]
+    // ),
   ];
 
   constructor(private slService: ShoppingListService) {}
+
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.recipesChanged.next(this.recipes.slice());
+  }
 
   getRecipes() {
     return this.recipes.slice();

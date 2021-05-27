@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
@@ -22,24 +23,26 @@ export class AuthComponent {
     if (!form.valid) return;
     this.isLoading = true;
     if (this.isLoginMode) {
-      this.isLoading = false
+      this.isLoading = false;
     } else {
       const email = form.value.email;
       const password = form.value.password;
 
-      this.authService.signup(email, password)
-        .pipe(finalize(()=> {
-          this.isLoading = false
-        }))
+      this.authService
+        .signup(email, password)
+        .pipe(
+          finalize(() => {
+            this.isLoading = false;
+          })
+        )
         .subscribe(
-        (response) => {
-          console.log(response);
-        },
-        (error) => {
-          this.error = 'An error occurred!'
-
-        }
-      );
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            this.error = error;
+          }
+        );
     }
 
     form.reset();

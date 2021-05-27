@@ -4,12 +4,13 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { API_KEY } from '../api.key';
 
-interface AuthResponseData {
+export interface AuthResponseData {
   idToken: string;
   email: string;
   refreshToken: string;
   expiresIn: string;
   localId: string;
+  registered?: boolean;
 }
 
 @Injectable({
@@ -20,7 +21,7 @@ export class AuthService {
 
   signup(email: string, password: string) {
     return this.http
-      .post(
+      .post<AuthResponseData>(
         `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
         {
           email: email,
@@ -31,7 +32,8 @@ export class AuthService {
       .pipe(
         catchError((errorRes) => {
           let error = 'An unknown error occured!';
-          if (!errorRes.error || !errorRes.error.error) return throwError(error);
+          if (!errorRes.error || !errorRes.error.error)
+            return throwError(error);
           switch (errorRes.error.error.message) {
             case 'EMAIL_EXISTS': {
               error = 'The email address is already in use by another account.';
@@ -50,5 +52,16 @@ export class AuthService {
           return throwError(error);
         })
       );
+  }
+
+  login(email: string, password: string) {
+    return this.http.post<AuthResponseData>(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
+      {
+        email: email,
+        password: password,
+        returnSecureToken: true,
+      }
+    );
   }
 }

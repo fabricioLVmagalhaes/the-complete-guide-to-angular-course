@@ -1,8 +1,8 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { AuthService } from './auth.service';
+import { AuthResponseData, AuthService } from './auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -22,28 +22,32 @@ export class AuthComponent {
   onSubmit(form: NgForm) {
     if (!form.valid) return;
     this.isLoading = true;
-    if (this.isLoginMode) {
-      this.isLoading = false;
-    } else {
-      const email = form.value.email;
-      const password = form.value.password;
 
-      this.authService
-        .signup(email, password)
-        .pipe(
-          finalize(() => {
-            this.isLoading = false;
-          })
-        )
-        .subscribe(
-          (response) => {
-            console.log(response);
-          },
-          (error) => {
-            this.error = error;
-          }
-        );
+    const email = form.value.email;
+    const password = form.value.password;
+
+    let authObs: Observable<AuthResponseData>;
+
+    if (this.isLoginMode) {
+      authObs = this.authService.login(email, password);
+    } else {
+      authObs = this.authService.signup(email, password);
     }
+
+    authObs
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          this.error = error;
+        }
+      );
 
     form.reset();
   }

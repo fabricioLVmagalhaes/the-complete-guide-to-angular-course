@@ -55,15 +55,17 @@ export class AuthService {
           returnSecureToken: true,
         }
       )
-      .pipe(catchError(this.handleError),
-      tap((resData) => {
-        this.handleAuth(
-          resData.email,
-          resData.localId,
-          resData.idToken,
-          +resData.expiresIn
-        );
-      });
+      .pipe(
+        catchError(this.handleError),
+        tap((resData) => {
+          this.handleAuth(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            +resData.expiresIn
+          );
+        })
+      );
   }
 
   private handleAuth(

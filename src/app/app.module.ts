@@ -13,6 +13,7 @@ import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-it
 import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { RecipesComponent } from './recipes/recipes.component';
+import { RecipesModule } from './recipes/recipes.module';
 import { AlertComponet } from './shared/alert/alert.component';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { LoaddingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
@@ -26,15 +27,9 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     AuthComponent,
     HeaderComponent,
     LoaddingSpinnerComponent,
-    RecipesComponent,
-    RecipeListComponent,
-    RecipeDetailComponent,
-    RecipeItemComponent,
     ShoppingListComponent,
     ShoppingEditComponent,
     DropdownDirective,
-    RecipeStartComponent,
-    RecipeEditComponent,
     AlertComponet,
     PlaceholderDirective,
   ],
@@ -44,6 +39,7 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    RecipesModule
   ],
   providers: [
     {

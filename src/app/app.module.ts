@@ -53,5 +53,6 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     },
   ],
   bootstrap: [AppComponent],
+  entryComponents: [AlertComponet],
 })
 export class AppModule {}

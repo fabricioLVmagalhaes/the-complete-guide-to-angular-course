@@ -16,6 +16,7 @@ import { RecipesComponent } from './recipes/recipes.component';
 import { AlertComponet } from './shared/alert/alert.component';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { LoaddingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { PlaceholderDirective } from './shared/placeholder/placeholder.directive';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 
@@ -34,7 +35,8 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     DropdownDirective,
     RecipeStartComponent,
     RecipeEditComponent,
-    AlertComponet
+    AlertComponet,
+    PlaceholderDirective,
   ],
   imports: [
     BrowserModule,

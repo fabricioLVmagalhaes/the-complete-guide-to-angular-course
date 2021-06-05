@@ -13,6 +13,10 @@
 # api-key
 /src/app/api.key.ts
 
+# firebase
+.firebase*
+firebase.*
+
 # profiling files
 chrome-profiler-events*.json
 speed-measure-plugin*.json

@@ -1,10 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from './store/auth.actions';
-import { User } from './user.model';
 
 export interface AuthResponseData {
   idToken: string;
@@ -19,61 +16,20 @@ export interface AuthResponseData {
   providedIn: 'root',
 })
 export class AuthService {
-  // user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private store: Store<fromApp.AppState>
-  ) {}
+  constructor(private store: Store<fromApp.AppState>) {}
 
-  autoLogin() {
-    const userData: {
-      email: string;
-      id: string;
-      _token: string;
-      _tokenExpirationDate: string;
-    } = JSON.parse(localStorage.getItem('userData'));
-    if (!userData) return;
-
-    const loadedUser = new User(
-      userData.email,
-      userData.id,
-      userData._token,
-      new Date(userData._tokenExpirationDate)
-    );
-
-    if (loadedUser.token) {
-      // this.user.next(loadedUser);
-      this.store.dispatch(
-        new AuthActions.AuthenticateSuccess({
-          email: loadedUser.email,
-          token: loadedUser.token,
-          userId: loadedUser.id,
-          expirationDate: new Date(userData._tokenExpirationDate),
-        })
-      );
-      const expDuration =
-        new Date(userData._tokenExpirationDate).getTime() -
-        new Date().getTime();
-      this.autoLogout(expDuration);
-    }
+  setLogoutTimmer(expDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.store.dispatch(new AuthActions.Logout());
+    }, expDuration);
   }
 
-  logout() {
-    // this.user.next(null);
-    this.store.dispatch(new AuthActions.Logout());
-    localStorage.removeItem('userData');
+  clearLogoutTimer() {
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = null;
     }
-    this.tokenExpirationTimer = null;
-  }
-
-  autoLogout(expDuration: number) {
-    this.tokenExpirationTimer = setTimeout(() => {
-      this.logout();
-    }, expDuration);
   }
 }

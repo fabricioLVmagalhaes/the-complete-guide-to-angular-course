@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
-import { EMPTY, of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { of } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import * as AuthActions from './auth.actions';
 
@@ -37,7 +37,7 @@ export class AuthEffects {
                 new Date().getTime() + +resData.expiresIn * 1000
               );
               return {
-                type: AuthActions.LOGIN,
+                type: AuthActions.AUTHENTICATE_SUCCESS,
                 payload: {
                   email: resData.email,
                   userId: resData.localId,
@@ -49,7 +49,7 @@ export class AuthEffects {
             catchError((errorRes) => {
               let error = 'An unknown error occured!';
               if (!errorRes.error || !errorRes.error.error)
-                return of(new AuthActions.LoginFail(error));
+                return of(new AuthActions.AuthenticateFail(error));
               switch (errorRes.error.error.message) {
                 case 'EMAIL_EXISTS': {
                   error =
@@ -81,18 +81,23 @@ export class AuthEffects {
                   break;
                 }
               }
-
-              return of(new AuthActions.LoginFail(error));
+              return of(new AuthActions.AuthenticateFail(error));
             })
           );
       })
     )
   );
 
-  authSuccess = createEffect(
+  // authSignup$ = createEffect(() =>
+  //     this.actions$.pipe(
+  //       ofType(AuthActions)
+  //     )
+  // )
+
+  authSuccess$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthActions.LOGIN),
+        ofType(AuthActions.AUTHENTICATE_SUCCESS),
         tap(() => {
           this.router.navigate(['/']);
         })

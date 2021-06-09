@@ -2,17 +2,15 @@ import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   Resolve,
-  RouterStateSnapshot,
+  RouterStateSnapshot
 } from '@angular/router';
+import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { DataStorageService } from '../shared/data-storage.service';
-import { Recipe } from './recipe.model';
-import { RecipeService } from './recipe.service';
-import * as fromApp from '../store/app.reducer';
-import * as RecipesActions from './store/recipe.actions';
-import { Actions, ofType } from '@ngrx/effects';
 import { take } from 'rxjs/operators';
+import * as fromApp from '../store/app.reducer';
+import { Recipe } from './recipe.model';
+import * as RecipesActions from './store/recipe.actions';
 
 @Injectable({
   providedIn: 'root',
